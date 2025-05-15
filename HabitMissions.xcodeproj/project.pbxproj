@@ -59,22 +59,9 @@
 		49719A982DD63731007BC4F6 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		49D655A32DD650C000CCDA97 /* Exceptions for "HabitMissions" folder in "HabitMissions" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Config/GoogleService-Info.plist",
-			);
-			target = 49719A6D2DD63677007BC4F6 /* HabitMissions */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		49719A702DD63677007BC4F6 /* HabitMissions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				49D655A32DD650C000CCDA97 /* Exceptions for "HabitMissions" folder in "HabitMissions" target */,
-			);
 			path = HabitMissions;
 			sourceTree = "<group>";
 		};
