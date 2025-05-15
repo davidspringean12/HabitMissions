@@ -1,8 +1,25 @@
-//
-//  FirebaseManager.swift
-//  HabitMissions
-//
-//  Created by David Springean on 15.05.25.
-//
+import Firebase
+import FirebaseAuth
+import FirebaseFirestore
 
-import Foundation
+class FirebaseManager: ObservableObject {
+    static let shared = FirebaseManager()
+    
+    let auth: Auth
+    let firestore: Firestore
+    
+    @Published var currentUser: User?
+    
+    private init() {
+        FirebaseApp.configure()
+        
+        auth = Auth.auth()
+        firestore = Firestore.firestore()
+        
+        // Enable offline persistence
+        let settings = FirestoreSettings()
+        settings.isPersistenceEnabled = true
+        settings.cacheSizeBytes = FirestoreCacheSizeUnlimited
+        firestore.settings = settings
+    }
+}
