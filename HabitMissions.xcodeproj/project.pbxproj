@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		49719A992DD63737007BC4F6 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49719A982DD63731007BC4F6 /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		49719A7C2DD63678007BC4F6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		49719A6E2DD63677007BC4F6 /* HabitMissions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitMissions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49719A7B2DD63678007BC4F6 /* HabitMissionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitMissionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49719A852DD63678007BC4F6 /* HabitMissionsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HabitMissionsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49719A982DD63731007BC4F6 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		49719A652DD63677007BC4F6 = {
 			isa = PBXGroup;
 			children = (
+				49719A982DD63731007BC4F6 /* .gitignore */,
 				49719A702DD63677007BC4F6 /* HabitMissions */,
 				49719A7E2DD63678007BC4F6 /* HabitMissionsTests */,
 				49719A882DD63678007BC4F6 /* HabitMissionsUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49719A992DD63737007BC4F6 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
