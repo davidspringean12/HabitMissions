@@ -35,24 +35,11 @@ struct NotificationTestView: View {
             
             Section(header: Text("Test Local Notifications")) {
                 Button("Test Daily Reminder (5 seconds)") {
-                    let content = UNMutableNotificationContent()
-                    content.title = "Mission Control"
-                    content.body = "Time for your mission: \(testMission.name)"
-                    content.sound = .default
-                    
-                    // Create trigger for 5 seconds from now
-                    let trigger = UNTimeIntervalNotificationTrigger(
-                        timeInterval: 5,
-                        repeats: false
-                    )
-                    
-                    let request = UNNotificationRequest(
-                        identifier: "mission-\(testMission.id)-test",
-                        content: content,
-                        trigger: trigger
-                    )
-                    
-                    UNUserNotificationCenter.current().add(request) { error in
+                    // Use NotificationService instead of creating notification directly
+                    NotificationService.shared.scheduleDailyReminder(
+                        for: testMission,
+                        at: Date().addingTimeInterval(5)
+                    ) { error in
                         DispatchQueue.main.async {
                             if let error = error {
                                 alertMessage = "Error scheduling notification: \(error.localizedDescription)"

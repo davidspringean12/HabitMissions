@@ -1,10 +1,14 @@
-import Foundation
+import UIKit
 import UserNotifications
 import FirebaseMessaging
-import UIKit
 
 class NotificationService: NSObject, UNUserNotificationCenterDelegate, MessagingDelegate {
     static let shared = NotificationService()
+    
+    // Single notification sound for the entire app
+    private let appNotificationSound: UNNotificationSound = {
+        return UNNotificationSound(named: UNNotificationSoundName("notification.wav"))
+    }()
     
     func configure() {
         UNUserNotificationCenter.current().delegate = self
@@ -20,88 +24,95 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate, Messaging
             
             if let error = error {
                 print("Error requesting notification authorization: \(error.localizedDescription)")
+                // Add debug information about the sound file
+                if let soundURL = Bundle.main.url(forResource: "notification", withExtension: "wav") {
+                    print("Sound file exists at path: \(soundURL)")
+                } else {
+                    print("Sound file not found in bundle!")
+                }
             }
         }
         
         Messaging.messaging().delegate = self
     }
     
-    // Schedule Daily Reminder
     func scheduleDailyReminder(for mission: Mission, at time: Date, completion: ((Error?) -> Void)? = nil) {
-            let content = UNMutableNotificationContent()
-            content.title = "Mission Control"
-            content.body = "Time for your mission: \(mission.name)"
-            content.sound = .default
+        print("Debug - Starting scheduleDailyReminder")
+        let content = UNMutableNotificationContent()
+        content.title = "Mission Control"
+        content.body = "Time for your mission: \(mission.name)"
+        content.sound = appNotificationSound // Use the app's custom sound
         
         // For testing, if the time is within 30 seconds of now, use a time interval trigger
-                let now = Date()
-                if abs(time.timeIntervalSince(now)) < 30 {
-                    let trigger = UNTimeIntervalNotificationTrigger(
-                        timeInterval: 5, // 5 seconds for testing
-                        repeats: false
-                    )
-                    
-                    let request = UNNotificationRequest(
-                        identifier: "mission-\(mission.id)-\(Date().timeIntervalSince1970)",
-                        content: content,
-                        trigger: trigger
-                    )
-                    
-                    UNUserNotificationCenter.current().add(request, withCompletionHandler: completion)
-                } else {
-                    // Normal daily reminder
-                    let calendar = Calendar.current
-                    let components = calendar.dateComponents([.hour, .minute], from: time)
-                    let trigger = UNCalendarNotificationTrigger(
-                        dateMatching: components,
-                        repeats: true
-                    )
-                    
-                    let request = UNNotificationRequest(
-                        identifier: "mission-\(mission.id)-daily",
-                        content: content,
-                        trigger: trigger
-                    )
-                    
-                    UNUserNotificationCenter.current().add(request, withCompletionHandler: completion)
+        let now = Date()
+        if abs(time.timeIntervalSince(now)) < 30 {
+            let trigger = UNTimeIntervalNotificationTrigger(
+                timeInterval: 5, // 5 seconds for testing
+                repeats: false
+            )
+            
+            let request = UNNotificationRequest(
+                identifier: "mission-\(mission.id)-\(Date().timeIntervalSince1970)",
+                content: content,
+                trigger: trigger
+            )
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Error scheduling notification: \(error.localizedDescription)")
                 }
+                completion?(error)
             }
+        } else {
+            // Normal daily reminder
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.hour, .minute], from: time)
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: components,
+                repeats: true
+            )
+            
+            let request = UNNotificationRequest(
+                identifier: "mission-\(mission.id)-daily",
+                content: content,
+                trigger: trigger
+            )
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Error scheduling notification: \(error.localizedDescription)")
+                }
+                completion?(error)
+            }
+        }
+    }
     
-    // Streak Notification
     func sendStreakNotification(streakCount: Int, missionName: String) {
         let content = UNMutableNotificationContent()
-        content.title = "🔥 Streak Alert!"
-        content.body = "Amazing! You've maintained a \(streakCount) day streak for \(missionName)!"
-        content.sound = .default
+        content.title = "🔥 Streak Achievement!"
+        content.body = "Amazing work keeping up with '\(missionName)' for \(streakCount) days!"
+        content.sound = appNotificationSound // Use the app's custom sound
         
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
             content: content,
-            trigger: nil
+            trigger: trigger
         )
         
-        UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error sending streak notification: \(error.localizedDescription)")
+            }
+        }
     }
     
     // MARK: - UNUserNotificationCenterDelegate
-    
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([[.banner, .sound]])
-    }
-    
-    // MARK: - MessagingDelegate
-    
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        // Since you mentioned you don't need to handle token refresh,
-        // we'll just implement the required delegate method
-        #if DEBUG
-        if let token = fcmToken {
-            print("Firebase registration token: \(token)")
-        }
-        #endif
+        completionHandler([.banner, .sound, .badge])
     }
 }

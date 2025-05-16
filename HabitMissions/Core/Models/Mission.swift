@@ -35,11 +35,22 @@ struct Mission: Codable, Identifiable {
 // Supporting types
 enum MissionCategory: String, Codable {
     case physicalTraining = "Physical Training"
-    case knowledgeAcquisition = "Knowledge Acquisition"
     case mentalPreparation = "Mental Preparation"
-    case nutrition = "Nutrition"
-    case energyManagement = "Energy Management"
-    case custom = "Custom"
+    case skillDevelopment = "Skill Development"
+    case equipmentMaintenance = "Equipment Maintenance"
+    
+    var iconName: String {
+        switch self {
+        case .physicalTraining:
+            return "physical-training-icon"
+        case .mentalPreparation:
+            return "mental-prep-icon"
+        case .skillDevelopment:
+            return "skill-dev-icon"
+        case .equipmentMaintenance:
+            return "equipment-icon"
+        }
+    }
 }
 
 enum MissionType: String, Codable {
