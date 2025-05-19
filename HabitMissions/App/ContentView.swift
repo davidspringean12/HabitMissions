@@ -1,11 +1,3 @@
-//
-//  ContentView.swift
-//  HabitMissions
-//
-//  Created by David Springean on 15.05.25.
-//
-
-
 import SwiftUI
 
 struct ContentView: View {
